@@ -3,10 +3,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/graph"
-    app:startDestination="@id/home">
+    app:startDestination="@id/homeFragment">
 
     <fragment
-        android:id="@+id/home"
+        android:id="@+id/homeFragment"
         android:name="com.example.movieproject.HomeFragment"
         android:label="home"
         tools:layout="@layout/home_fragment">
@@ -30,12 +30,12 @@
         tools:layout="@layout/fragment_detail">
         <action
             android:id="@+id/action_detailFragment_to_home"
-            app:destination="@id/home"
+            app:destination="@id/homeFragment"
             app:enterAnim="@anim/nav_default_enter_anim"
             app:exitAnim="@anim/nav_default_exit_anim"
             app:popEnterAnim="@anim/nav_default_pop_enter_anim"
             app:popExitAnim="@anim/nav_default_pop_exit_anim"
-            app:popUpTo="@id/home"
+            app:popUpTo="@id/homeFragment"
             app:popUpToInclusive="true" />
 
     </fragment>

@@ -2,21 +2,18 @@ package com.example.movieproject
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.MenuItem
 import android.view.View
-import android.view.animation.Animation
-import androidx.appcompat.widget.Toolbar
-import androidx.fragment.app.FragmentContainer
-import androidx.fragment.app.FragmentContainerView
+import android.view.WindowInsetsController
 import androidx.navigation.NavController
 import androidx.navigation.Navigation.*
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.NavigationUI
-import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class MainActivity : AppCompatActivity() {
     lateinit var bottomNavigationView: BottomNavigationView
+    lateinit var navController: NavController
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,8 +23,10 @@ class MainActivity : AppCompatActivity() {
 
     private fun setUpNavigation() {
         bottomNavigationView = findViewById(R.id.bottomnavigation)
-        val navController =
-            supportFragmentManager.findFragmentById(R.id.nav_host_fragment)!!.findNavController()
+        navController = supportFragmentManager
+            .findFragmentById(R.id.nav_host_fragment)!!
+            .findNavController()
+
         NavigationUI.setupWithNavController(bottomNavigationView, navController)
 
         navController.addOnDestinationChangedListener { controller, destination, arguments ->
@@ -35,10 +34,11 @@ class MainActivity : AppCompatActivity() {
                 R.id.detailFragment -> {
                     bottomNavigationView.visibility = View.GONE
                 }
-                else -> {
+                R.id.homeFragment -> {
                     bottomNavigationView.visibility = View.VISIBLE
                 }
             }
         }
+
     }
 }

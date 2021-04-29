@@ -11,7 +11,7 @@ import com.bumptech.glide.Glide
 import com.example.movieproject.R
 import com.example.movieproject.data.data.entity.MovieData
 
-class MovieAdapter(val users: ArrayList<MovieData>, val callback: (Int) -> Unit) :
+class MovieAdapter(val users: ArrayList<MovieData>, val callback: (MovieData) -> Unit) :
     RecyclerView.Adapter<MovieAdapter.ViewHolder>() {
     private lateinit var mcontext: Context
 
@@ -30,7 +30,7 @@ class MovieAdapter(val users: ArrayList<MovieData>, val callback: (Int) -> Unit)
 
         return ViewHolder(view).apply {
             itemView.setOnClickListener {
-                if (adapterPosition != RecyclerView.NO_POSITION) callback(adapterPosition)
+                if (adapterPosition != RecyclerView.NO_POSITION) callback(users[adapterPosition])
             }
         }
     }

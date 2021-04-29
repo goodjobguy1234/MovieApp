@@ -3,6 +3,7 @@ package com.example.movieproject
 
 import android.graphics.Bitmap
 import android.os.Bundle
+import android.view.Menu
 import android.view.View
 import android.widget.TextView
 import androidx.activity.OnBackPressedCallback
@@ -10,6 +11,8 @@ import androidx.activity.addCallback
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.MutableLiveData
 import androidx.navigation.fragment.findNavController
 import androidx.palette.graphics.Palette
 import com.bumptech.glide.Glide
@@ -27,7 +30,7 @@ class DetailFragment : BaseFragment() {
     lateinit var appBar: AppBarLayout
     lateinit var tvDescription: TextView
     lateinit var ivPic: AppCompatImageView
-    lateinit var movieData: MovieData
+    var movieData: MovieData? = null
     lateinit var collapsingToolbar: CollapsingToolbarLayout
     private var backCallback: OnBackPressedCallback? = null
 
@@ -48,6 +51,9 @@ class DetailFragment : BaseFragment() {
             setSupportActionBar(toolbar)
             supportActionBar?.setDisplayHomeAsUpEnabled(true)
             supportActionBar?.setDisplayShowHomeEnabled(true)
+            toolbar.setNavigationOnClickListener {
+                requireActivity().onBackPressed()
+            }
         }
         collapsingToolbar.title = "Description"
     }
@@ -57,9 +63,9 @@ class DetailFragment : BaseFragment() {
     }
 
     override fun initView() {
-        movieData = model.selectedData.value!!
+        movieData = model.selectedData.value
 
-        with(movieData) {
+        movieData?.apply {
             tvDescription.text = description
 
             Glide.with(requireContext()).asBitmap()
@@ -71,12 +77,7 @@ class DetailFragment : BaseFragment() {
                 })
         }
 
-        appBar.addOnOffsetChangedListener(AppBarLayout.OnOffsetChangedListener { appBarLayout, verticalOffset ->
-            appBarLayout.isLifted = abs(verticalOffset) <= 200
-        })
-
     }
-
 
     private fun getPalette(bitmap: Bitmap?) {
 
@@ -97,9 +98,14 @@ class DetailFragment : BaseFragment() {
 //        handle when click back btn
         backCallback = requireActivity().onBackPressedDispatcher.addCallback(this) {
             remove()
+            model.repository.selectedData.value = null
             findNavController().popBackStack()
-        }
 
+        }
+    }
+
+    companion object {
+        fun newInstance() = DetailFragment()
     }
 
 

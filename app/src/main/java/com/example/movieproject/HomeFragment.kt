@@ -1,13 +1,13 @@
 package com.example.movieproject
 
 
-import android.os.Bundle
 import android.util.Log
 import android.view.View
 
 import android.widget.ProgressBar
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -18,10 +18,10 @@ import com.example.movieproject.presentation.MovieAdapter
 import com.google.android.material.appbar.AppBarLayout
 
 class HomeFragment : BaseFragment() {
+
     private val model by activityViewModels<DataViewModel> {
         Injection.viewModelFactory
     }
-
     override var layoutRes = R.layout.home_fragment
     private var movieList = ArrayList<MovieData>()
     private lateinit var recyclerView: RecyclerView
@@ -40,33 +40,32 @@ class HomeFragment : BaseFragment() {
         }
         recyclerView.visibility = View.GONE
         (requireActivity() as? MainActivity)?.setSupportActionBar(toolbar)
-        toolbar.title = "Movie"
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        model.getData()
     }
 
     override fun observeView() {
-        model.liveData.observe(viewLifecycleOwner) {
-            progressBar.visibility = View.GONE
-            fetchData(it)
-            recyclerView.visibility = View.VISIBLE
+
+        with(model) {
+            liveData.observe(viewLifecycleOwner, {
+                progressBar.visibility = View.GONE
+                fetchData(it)
+                recyclerView.visibility = View.VISIBLE
+            })
+            selectedData.observe(viewLifecycleOwner, { data ->
+                if (data != null) findNavController().navigate(R.id.action_home_to_detailFragment)
+            })
+
         }
 
-        model.selectedData.observe(viewLifecycleOwner) {
-            Log.d("Item", it.toString())
-
-        }
     }
 
     override fun initView() {
+        model.getData()
+
         recyclerView.apply {
 
-            adapter = MovieAdapter(movieList) {
-                model.repository.selectedData.value = model.liveData.value?.get(it)
-                findNavController().navigate(R.id.action_home_to_detailFragment)
+            adapter = MovieAdapter(movieList) { movie ->
+                model.selectedDate(movie)
+
             }
 
             layoutManager = GridLayoutManager(requireContext(), 2)
@@ -84,4 +83,7 @@ class HomeFragment : BaseFragment() {
         recyclerView.adapter!!.notifyDataSetChanged()
     }
 
+    companion object {
+        fun newInstance() = HomeFragment()
+    }
 }

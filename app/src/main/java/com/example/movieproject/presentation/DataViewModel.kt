@@ -12,4 +12,9 @@ class DataViewModel(val repository: Repository): ViewModel() {
     fun getData() {
         repository.getData()
     }
+
+    fun selectedDate(data: MovieData) {
+        repository.selectedData.value = data
+    }
+
 }
