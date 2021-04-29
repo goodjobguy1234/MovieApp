@@ -9,9 +9,13 @@ import org.json.JSONObject
 
 data class MovieData(
 
-  val title_en:String,
-  val title_th:String,
-  val duration:Int,
+  val title_en: String,
+  val title_th: String,
+  val duration: Int,
   @SerializedName("poster_url")
-  val url:String
+  val url: String,
+  @SerializedName("synopsis_th")
+  val description: String,
+  val genre: String,
+  val actor: String
 )

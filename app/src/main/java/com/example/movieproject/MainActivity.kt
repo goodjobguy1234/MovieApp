@@ -26,11 +26,12 @@ class MainActivity : AppCompatActivity() {
 
     private fun setUpNavigation() {
         bottomNavigationView = findViewById(R.id.bottomnavigation)
-        val navController = supportFragmentManager.findFragmentById(R.id.nav_host_fragment)!!.findNavController()
+        val navController =
+            supportFragmentManager.findFragmentById(R.id.nav_host_fragment)!!.findNavController()
         NavigationUI.setupWithNavController(bottomNavigationView, navController)
 
         navController.addOnDestinationChangedListener { controller, destination, arguments ->
-            when(destination.id){
+            when (destination.id) {
                 R.id.detailFragment -> {
                     bottomNavigationView.visibility = View.GONE
                 }

@@ -11,8 +11,10 @@ import com.bumptech.glide.Glide
 import com.example.movieproject.R
 import com.example.movieproject.data.data.entity.MovieData
 
-class MovieAdapter(val users:ArrayList<MovieData>, val callback: (MovieData) -> Unit ) : RecyclerView.Adapter<MovieAdapter.ViewHolder>(){
-    private lateinit var mcontext:Context
+class MovieAdapter(val users: ArrayList<MovieData>, val callback: (Int) -> Unit) :
+    RecyclerView.Adapter<MovieAdapter.ViewHolder>() {
+    private lateinit var mcontext: Context
+
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val title_en = itemView.findViewById<TextView>(R.id.title_en)
         val title_th = itemView.findViewById<TextView>(R.id.title_th)
@@ -24,9 +26,13 @@ class MovieAdapter(val users:ArrayList<MovieData>, val callback: (MovieData) -> 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         mcontext = parent.context
         val view = LayoutInflater.from(mcontext)
-                .inflate(R.layout.movie_holder, parent, false)
+            .inflate(R.layout.movie_holder, parent, false)
 
-        return ViewHolder(view)
+        return ViewHolder(view).apply {
+            itemView.setOnClickListener {
+                if (adapterPosition != RecyclerView.NO_POSITION) callback(adapterPosition)
+            }
+        }
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
@@ -35,9 +41,6 @@ class MovieAdapter(val users:ArrayList<MovieData>, val callback: (MovieData) -> 
             title_th.text = users[position].title_th
             duration.text = "Video duration:${users[position].duration}"
             Glide.with(mcontext).load(users[position].url).into(image)
-        }
-        holder.itemView.setOnClickListener {
-            callback(users[position])
         }
     }
 

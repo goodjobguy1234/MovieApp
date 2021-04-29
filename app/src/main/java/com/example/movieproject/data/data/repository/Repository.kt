@@ -5,6 +5,7 @@ import com.example.movieproject.data.data.entity.MovieData
 import com.example.movieproject.data.data.remote.ApiManager
 
 abstract class Repository(apiManager: ApiManager) {
-    abstract var liveData:MutableLiveData<ArrayList<MovieData>>
+    abstract var liveData: MutableLiveData<ArrayList<MovieData>>
+    abstract var selectedData: MutableLiveData<MovieData>
     abstract fun getData()
 }
